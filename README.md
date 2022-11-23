@@ -1,1 +1,1 @@
-This is MDB2... something..
+This is a project aiming to implment a virual Lambda Meter for Group 2 in MDB2.
