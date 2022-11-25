@@ -1,3 +1,9 @@
+# Scale to the slider thing 
+# count the rings and movements to calculate lamda  
+# Check touch pad compatability 
+# Drop down box so we can change wavelength             Let agni know if an issue 
+
+
 #! /usr/bin/env python
 from LightPipes import *                    # https://opticspy.github.io/lightpipes/ 
 import matplotlib

@@ -1,3 +1,4 @@
+# Todo 
 # Scale to the slider thing 
 # count the rings and movements to calculate lamda  
 # Check touch pad compatability 
@@ -123,15 +124,15 @@ slider = tk.Scale(
     from_ = 0.16,
     to = 0.31,
     orient = 'horizontal',  # vertical
-    width=100,
-    sliderlength=150,
+    width = 100,
+    sliderlength = 150,
     command = slider_changed,
-    variable = current_value,
+   # variable = current_value,
     resolution = 0.0001,
-    bg="black",
-    fg="white",
-    activebackground="red",
-    font=("Arial", 30)
+    bg = "black",
+    fg = "white",
+    activebackground = "red",
+    font = ("Arial", 30)
 )
 
 slider.grid(
@@ -178,10 +179,10 @@ canvas.draw()
 # value label
 value_label = tk.Label(
     master,
-    text=get_current_value(),
-    font=("Arial", 30),
-    bg="black",
-    fg="white"
+    text = get_current_value(),
+    font = ("Arial", 30),
+    bg = "black",
+    fg = "white"
 )
 # value_label.grid(
 #     row = 4,
