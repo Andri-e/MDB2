@@ -41,7 +41,8 @@ class MyCircularQueue():
         self.queue = [None] * k
         self.head = self.tail = -1
         self.ring_counter = 0 
-        self.change = 20*cm
+        self.z1_init = 20*cm
+        self.change = 0
 
     # Insert an element into the circular queue
     def enqueue(self, data):
@@ -100,8 +101,8 @@ class MyCircularQueue():
     def print_rings(self):
         print(self.ring_counter)
 
-    def track_change(self, changed):
-        self.change = self.change + changed
+    def track_change(self, z1):
+        self.change = z1 - self.z1_init
         print(self.change)
 
     def print_lambda(self): 
