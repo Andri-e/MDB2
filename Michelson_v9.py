@@ -43,6 +43,7 @@ class MyCircularQueue():
         self.ring_counter = 0 
         self.z1_init = 20*cm
         self.change = 0
+        self.z1_last = 20*cm
 
     # Insert an element into the circular queue
     def enqueue(self, data):
@@ -90,13 +91,27 @@ class MyCircularQueue():
                 print(self.queue[i], end=" ")
             print()
 
-    def check_gradiant(self):
+    def check_peak(self, z1):
         if (self.queue[self.head]) > (self.queue[self.head - 1]):
             #if (self.queue[self.head - 1]) > (self.queue[self.head - 2]):
                 #print("Growing -> we dont care?")
             if (self.queue[self.head - 1]) < (self.queue[self.head - 2]):
                 #print("No longer growing -> one ring?")
-                self.ring_counter = self.ring_counter + 1
+                if z1 > self.z1_last:
+                    self.ring_counter = self.ring_counter + 1
+                    self.z1_last = z1
+
+                elif z1 < self.z1_last:
+                    self.ring_counter = self.ring_counter - 1 
+                    self.z1_last = z1
+                
+                elif z1 == self.z1_last:
+                    self.ring_counter = self.ring_counter + 1 
+                    self.z1_last = z1
+                    print("same")
+
+                else:
+                    print("Error")
 
     def print_rings(self):
         print(self.ring_counter)
@@ -189,7 +204,7 @@ def slider_changed( event ):
 
     #Calculateing the Lambda 
     queue_object.enqueue(I[255, 255])
-    queue_object.check_gradiant()
+    queue_object.check_peak(z1)
 
 
     #For debuging 
