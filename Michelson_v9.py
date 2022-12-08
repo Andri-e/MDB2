@@ -230,9 +230,11 @@ def slider_changed( event ):
     subp.imshow(I, cmap='gist_heat'); #plt.axis('off'); plt.title('intensity pattern')
     canvas.draw()
 
+    Visualizer.slider_update_event(VIS, z1, z2_updated)
 
 
 master = tk.Tk()
+VIS = Visualizer.Window(master)
 
 master.configure(bg="black")
 master.columnconfigure(0, weight=1)
@@ -292,7 +294,7 @@ value_label = tk.Label(
     fg = "white"
 )
 
-master.after(20, Visualizer.init(master))
+#master.after(20, Visualizer.init(master))
 
 master.mainloop()
 

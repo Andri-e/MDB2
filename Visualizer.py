@@ -9,12 +9,17 @@ class Window(tk.Toplevel):
         self.geometry('300x100')
         self.title('Toplevel Window')
 
-        ttk.Button(self,
-                   text='Close',
-                   command=self.destroy).pack(expand=True)
+        self.my_label = ttk.Label(self,
+                text="Test text").place(x=20,y=20)
 
 
-def slider_update_event(d):
+def update_text(window, text):
+    window.my_label = ttk.Label(window,
+                                text= f"Z1 = {text}").place(x=20,y=20)
+
+
+def slider_update_event(window, z1, z2_updated):
+    update_text(window, z1)
     pass
 
 
