@@ -16,7 +16,11 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import numpy as np
 
-import tkinter as tk                        # https://realpython.com/python-gui-tkinter/ 
+import Visualizer
+
+import tkinter as tk                        # https://realpython.com/python-gui-tkinter/
+
+import cProfile
 
 
 wavelength = 632.8*nm                     # wavelength of HeNe laser          nm is *e-7
@@ -30,8 +34,6 @@ z4 = 1*cm                                 # distance beamsplitter to screen
 Rbs = 0.5                                 # reflection beam splitter
 tx = 0.0*mrad; ty = 0.0*mrad              # tilt of mirror 1                  mrad ) 0.0
 f = 100*cm                                # focal length of positive lens
-
-
 
 
 class MyCircularQueue():
@@ -92,26 +94,31 @@ class MyCircularQueue():
             print()
 
     def check_peak(self, z1):
-        if (self.queue[self.head]) > (self.queue[self.head - 1]):
+        if ((self.queue[self.head]) == None) or ((self.queue[self.head - 1]) == None):
+            return
+        if (self.queue[self.head]) <= (self.queue[self.head - 1]):
+            return
+        #else:
             #if (self.queue[self.head - 1]) > (self.queue[self.head - 2]):
-                #print("Growing -> we dont care?")
-            if (self.queue[self.head - 1]) < (self.queue[self.head - 2]):
-                #print("No longer growing -> one ring?")
-                if z1 > self.z1_last:
-                    self.ring_counter = self.ring_counter + 1
-                    self.z1_last = z1
+             #print("Growing -> we dont care?")
 
-                elif z1 < self.z1_last:
-                    self.ring_counter = self.ring_counter - 1 
-                    self.z1_last = z1
-                
-                elif z1 == self.z1_last:
-                    self.ring_counter = self.ring_counter + 1 
-                    self.z1_last = z1
-                    print("same")
+        if (self.queue[self.head - 1]) < (self.queue[self.head - 2]):
+            #print("No longer growing -> one ring?")
+            if z1 > self.z1_last:
+                self.ring_counter = self.ring_counter + 1
+                self.z1_last = z1
 
-                else:
-                    print("Error")
+            elif z1 < self.z1_last:
+                self.ring_counter = self.ring_counter - 1
+                self.z1_last = z1
+
+            elif z1 == self.z1_last:
+                self.ring_counter = self.ring_counter + 1
+                self.z1_last = z1
+                print("same")
+
+            else:
+                print("Error")
 
     def print_rings(self):
         print(self.ring_counter)
@@ -122,7 +129,10 @@ class MyCircularQueue():
 
     def print_lambda(self): 
         #print("Uhh, need to figure out the formula but we have change in mm? and the ring count")
-        print(2*self.change/self.ring_counter)
+        if self.ring_counter != 0:
+            print(2*self.change/self.ring_counter)
+        else:
+            print(f"Change: {self.change}, zero division")
 
 queue_object = MyCircularQueue(5)
 
@@ -209,8 +219,8 @@ def slider_changed( event ):
 
 
     #For debuging 
-    queue_object.print_rings()
-    queue_object.track_change(z1)
+    #queue_object.print_rings()
+    #queue_object.track_change(z1)
     #print(I[255,255])
     #print( z1 )    
 
@@ -219,6 +229,7 @@ def slider_changed( event ):
     subp.axis('off')
     subp.imshow(I, cmap='gist_heat'); #plt.axis('off'); plt.title('intensity pattern')
     canvas.draw()
+
 
 
 master = tk.Tk()
@@ -280,6 +291,8 @@ value_label = tk.Label(
     bg = "black",
     fg = "white"
 )
+
+master.after(20, Visualizer.init(master))
 
 master.mainloop()
 
