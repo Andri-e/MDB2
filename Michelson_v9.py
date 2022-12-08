@@ -121,8 +121,8 @@ class MyCircularQueue():
         print(self.change)
 
     def print_lambda(self): 
-        print("Uhh, need to figure out the formula but we have change in mm? and the ring count")
-        # Insert formula and stuff here later mby? 
+        #print("Uhh, need to figure out the formula but we have change in mm? and the ring count")
+        print(2*self.change/self.ring_counter)
 
 queue_object = MyCircularQueue(5)
 
@@ -205,6 +205,7 @@ def slider_changed( event ):
     #Calculateing the Lambda 
     queue_object.enqueue(I[255, 255])
     queue_object.check_peak(z1)
+    queue_object.print_lambda()
 
 
     #For debuging 
