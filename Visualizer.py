@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, Canvas, BOTH, Label, Frame
+from tkinter import ttk, Canvas, BOTH, Label, Frame, NW
 from PIL import ImageTk, Image
 
 
@@ -11,17 +11,25 @@ class Window(tk.Toplevel):
         self.geometry('600x400')
         self.title('Toplevel Window')
 
-        canvas = Canvas(self)
-        canvas.create_line(20, 20, 50, 20, width=3)
-        canvas.pack(fill=BOTH, expand=1)
+        self.canvas = Canvas(self, background="white")
+        self.canvas.pack(fill=BOTH, expand=1)
 
-        image = Image.open("Images/splitter.png")
-        test = ImageTk.PhotoImage(image)
-        label = tk.Label(image=test)
-        label.image = test
-        label.place(x=200, y=200)
+        self.splitter_img = Image.open("Images/splitter.png")
+        self.splitter_img = self.splitter_img.resize((90, 15), Image.ANTIALIAS)
+        self.splitter_img = ImageTk.PhotoImage(self.splitter_img)
 
-        #frame = Frame(self, width=100, height=100)
+        self.mirror_image = Image.open("Images/mirror.png")
+        self.mirror_image = self.mirror_image.resize((90, 15), Image.ANTIALIAS)
+        self.mirror_image1 = ImageTk.PhotoImage(self.mirror_image)
+        self.mirror_image2 = ImageTk.PhotoImage(self.mirror_image.rotate(90))
+
+        self.splitter_canvas = self.canvas.create_image(200, 20, anchor=NW, image=self.splitter_img)
+        self.mirror_canvas1 = self.canvas.create_image(200, 40, anchor=NW, image=self.mirror_image1)
+        self.mirror_canvas2 = self.canvas.create_image(250, 40, anchor=NW, image=self.mirror_image2)
+        self.canvas.create_line(20, 20, 50, 20, width=3)
+
+
+    #frame = Frame(self, width=100, height=100)
         #frame.pack()
         #frame.place(anchor='center', relx=0.5, rely=0.5)
 
@@ -30,15 +38,17 @@ class Window(tk.Toplevel):
         #splitter_label.pack()
 
 
+Z1_temp=0.2
 
-def update_text(window, text):
+def update_text(window,z1, z2):
     ttk.Label(window,
-              text=f"Z1 = {text}").place(x=0, y=0)
+              text=f"Z1 = {z1}").place(x=0, y=0)
+    window.canvas.moveto(window.mirror_canvas1, z1*1000, 40)
 
 
 
 def slider_update_event(window, z1, z2_updated):
-    update_text(window, z1)
+    update_text(window,z1, z2_updated)
     pass
 
 
