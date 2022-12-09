@@ -285,6 +285,8 @@ canvas._tkcanvas.config(bg="black")
 canvas.get_tk_widget().grid(column=0, row=0, sticky = "nsew")
 canvas.draw()
 
+master.geometry('1000x700')
+
 # value label
 value_label = tk.Label(
     master,
