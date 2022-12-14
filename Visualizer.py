@@ -53,14 +53,14 @@ class Window(tk.Toplevel):
                                                         grid_pos.y2+3,
                                                         anchor=NW,
                                                         image=self.splitter_img)
-        self.mirror_stationary = self.canvas.create_image(grid_pos.x1,
-                                                          grid_pos.y1,
-                                                          anchor=NW,
-                                                          image=self.mirror_image1)
-        self.mirror_moving = self.canvas.create_image(grid_pos.x2,
-                                                      grid_pos.y2,
-                                                      anchor=NW,
-                                                      image=self.mirror_image2)
+        self.mirror_moving1 = self.canvas.create_image(grid_pos.x1,
+                                                       grid_pos.y1,
+                                                       anchor=NW,
+                                                       image=self.mirror_image1)
+        self.mirror_moving2 = self.canvas.create_image(grid_pos.x2,
+                                                       grid_pos.y2,
+                                                       anchor=NW,
+                                                       image=self.mirror_image2)
 
         self.lens_canvas = self.canvas.create_image(grid_pos.x1,
                                                     grid_pos.y2+200,
@@ -72,12 +72,12 @@ class Window(tk.Toplevel):
                                                     anchor=NW,
                                                     image=self.cam_img)
 
-        self.canvas.create_line(grid_pos.x1+45,
-                                grid_pos.y2+40,
-                                grid_pos.x1+45,
-                                grid_pos.y1+15,
-                                width=3,
-                                fill='red')
+        self.laser1 = self.canvas.create_line(grid_pos.x1+45,
+                                              grid_pos.y2+40,
+                                              grid_pos.x1+45,
+                                              grid_pos.y1+15,
+                                              width=3,
+                                              fill='red')
 
         self.canvas.create_line(grid_pos.x1+45,
                                 grid_pos.y2+40,
@@ -89,12 +89,13 @@ class Window(tk.Toplevel):
         points = [grid_pos.x1+45, grid_pos.y2+190,
                   grid_pos.x1+35, grid_pos.y2+280,
                   grid_pos.x1+55, grid_pos.y2+280]
+
         self.canvas.create_polygon(points, width=3, fill='red')
 
-        self.laser1 = self.canvas.create_line(grid_pos.x1+45,
-                                              grid_pos.y2+40,
+        self.laser2 = self.canvas.create_line(grid_pos.x1 + 45,
+                                              grid_pos.y2 + 40,
                                               grid_pos.x2,
-                                              grid_pos.y2+40,
+                                              grid_pos.y2 + 40,
                                               width=3,
                                               fill='red')
         self.canvas.create_line(grid_pos.x0+90,
@@ -141,43 +142,58 @@ class Window(tk.Toplevel):
         self.pointing_label = self.canvas.create_text(grid_pos.x2+25, grid_pos.y2+90+34,  text='20.0 mm')
 
         # Item labels
-        self.canvas.create_text(grid_pos.x1+20, grid_pos.y1-10,  text='Mirror')
         self.canvas.create_text(grid_pos.x1, grid_pos.y2+20,  text='Beam splitter')
         self.canvas.create_text(grid_pos.x1-10, grid_pos.y2+300,  text='Viewpoint')
         self.canvas.create_text(grid_pos.x0+30, grid_pos.y2+18,  text='Laser')
         self.canvas.create_text(grid_pos.x1, grid_pos.y2+190,  text='Concave lens')
-        self.mirror_label = self.canvas.create_text(grid_pos.x2+4, grid_pos.y2-7,  text='Mirror')
+        self.mirror_label1 = self.canvas.create_text(grid_pos.x1+20, grid_pos.y1-10,  text='Mirror')
+        self.mirror_label2 = self.canvas.create_text(grid_pos.x2 + 4, grid_pos.y2 - 7, text='Mirror')
 
 
-def update_text(window,z1, z2):
-    pos = int(grid_pos.x2-(pos_scale/5)+z1*pos_scale)
-    window.canvas.moveto(window.mirror_moving,
-                         pos,
-                         grid_pos.y2
+def update_text(window, z1, z2):
+    pos2 = int(grid_pos.x2-(pos_scale/5)+z1*pos_scale)
+    pos1 = int(grid_pos.y1-(pos_scale/5)+z1*pos_scale)
+
+    window.canvas.moveto(window.mirror_moving1,
+                         grid_pos.x1,
+                         pos1
                          )
 
     window.canvas.coords(window.laser1,
                          grid_pos.x1+45,
                          grid_pos.y2+40,
-                         grid_pos.x2-(pos_scale/5)+z1*pos_scale,
-                         grid_pos.y2+40)
+                         grid_pos.x1+45,
+                         pos1+15)
+
+    window.canvas.coords(window.mirror_label1,
+                         grid_pos.x1+20,
+                         pos1-10)
+
+    window.canvas.moveto(window.mirror_moving2,
+                         pos2,
+                         grid_pos.y2
+                         )
+
+    window.canvas.coords(window.laser2,
+                         grid_pos.x1 + 45,
+                         grid_pos.y2 + 40,
+                         grid_pos.x2 - (pos_scale/5) + z1 * pos_scale,
+                         grid_pos.y2 + 40)
 
     window.canvas.coords(window.pointing_line,
-                         pos+1,
+                         pos2+1,
                          grid_pos.y2+89,
-                         pos+1,
+                         pos2+1,
                          grid_pos.y2+89+40)
 
     window.canvas.coords(window.pointing_label,
-                         pos+25,
+                         pos2+25,
                          grid_pos.y2+90+34)
 
-    window.canvas.coords(window.mirror_label,
-                         pos+4, grid_pos.y2-7)
+    window.canvas.coords(window.mirror_label2,
+                         pos2 + 4, grid_pos.y2 - 7)
 
     window.canvas.itemconfigure(window.pointing_label, text=f"{z1*100:.1f} mm")
-
-
 
 
 def slider_update_event(window, z1, z2_updated):
