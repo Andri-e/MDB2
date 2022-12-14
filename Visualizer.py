@@ -45,14 +45,14 @@ class Window(tk.Toplevel):
                                                         grid_pos.y2+3,
                                                         anchor=NW,
                                                         image=self.splitter_img)
-        self.mirror_canvas1 = self.canvas.create_image(grid_pos.x1,
-                                                       grid_pos.y1,
-                                                       anchor=NW,
-                                                       image=self.mirror_image1)
-        self.mirror_canvas2 = self.canvas.create_image(grid_pos.x2,
-                                                       grid_pos.y2,
-                                                       anchor=NW,
-                                                       image=self.mirror_image2)
+        self.mirror_stationary = self.canvas.create_image(grid_pos.x1,
+                                                          grid_pos.y1,
+                                                          anchor=NW,
+                                                          image=self.mirror_image1)
+        self.mirror_moving = self.canvas.create_image(grid_pos.x2,
+                                                      grid_pos.y2,
+                                                      anchor=NW,
+                                                      image=self.mirror_image2)
 
         self.canvas.create_line(grid_pos.x1+45,
                                 grid_pos.y2+40,
@@ -74,20 +74,50 @@ class Window(tk.Toplevel):
                                 width=3,
                                 fill='red')
 
-        self.z1_label = ttk.Label(self,text="Z1 = 0.2")
-        self.z1_label.place(x=0, y=0)
-
         self.scale_label = ttk.Label(self,text="Model not to scale")
         self.scale_label.place(x=0, y=20)
 
+        self.pointing_line = self.canvas.create_line(grid_pos.x2+1,
+                                                     grid_pos.y2+89,
+                                                     grid_pos.x2+1,
+                                                     grid_pos.y2+89+40,
+                                                     width=2,
+                                                     fill='black')
+        self.canvas.create_line(grid_pos.x2-pos_scale*0.04+1,
+                                grid_pos.y2+100,
+                                grid_pos.x2+pos_scale*0.11+1,
+                                grid_pos.y2+100,
+                                width=2,
+                                fill='black') #scale line horizontal
 
-Z1_temp=0.2
+        self.canvas.create_line(grid_pos.x2-pos_scale*0.04+1,
+                                grid_pos.y2+100,
+                                grid_pos.x2-pos_scale*0.04+1,
+                                grid_pos.y2+90,
+                                width=2,
+                                fill='black') #scale line delimiter 1
+
+        self.canvas.create_text(grid_pos.x2-pos_scale*0.10, grid_pos.y2+95,  text='16 mm')
+
+        self.canvas.create_line(grid_pos.x2+pos_scale*0.11+1,
+                                grid_pos.y2+100,
+                                grid_pos.x2+pos_scale*0.11+1,
+                                grid_pos.y2+90,
+                                width=2,
+                                fill='black') #scale line delimiter 2
+
+        self.canvas.create_text(grid_pos.x2+pos_scale*0.15, grid_pos.y2+95,  text='31 mm')
+
+        self.pointing_label = self.canvas.create_text(grid_pos.x2+22, grid_pos.y2+90+34,  text='20 mm')
+
+
+
+
 
 def update_text(window,z1, z2):
-    ttk.Label(window,
-              text=f"Z1 = {z1}").place(x=0, y=0)
-    window.canvas.moveto(window.mirror_canvas2,
-                         grid_pos.x2-(pos_scale/5)+z1*pos_scale,
+    pos = int(grid_pos.x2-(pos_scale/5)+z1*pos_scale)
+    window.canvas.moveto(window.mirror_moving,
+                         pos,
                          grid_pos.y2
                          )
 
@@ -97,10 +127,20 @@ def update_text(window,z1, z2):
                          grid_pos.x2-(pos_scale/5)+z1*pos_scale,
                          grid_pos.y2+40)
 
+    window.canvas.coords(window.pointing_line,
+                         pos+1,
+                         grid_pos.y2+89,
+                         pos+1,
+                         grid_pos.y2+89+40)
+
+    window.canvas.coords(window.pointing_label,
+                         pos+25,
+                         grid_pos.y2+90+34)
+    window.canvas.itemconfigure(window.pointing_label, text=f"{z1*100:.1f} mm")
 
 
 def slider_update_event(window, z1, z2_updated):
-    update_text(window,z1, z2_updated)
+    update_text(window, z1, z2_updated)
     pass
 
 
