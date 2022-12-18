@@ -116,7 +116,6 @@ class MyCircularQueue():
 
             else:
                 print("Error")
-            print(self.ring_counter)
 
     def print_rings(self):
         print(self.ring_counter)
