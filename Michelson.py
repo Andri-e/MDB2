@@ -94,14 +94,11 @@ class MyCircularQueue():
             print()
 
     def check_peak(self, z1):
-        # if ((self.queue[self.head]) == None) or ((self.queue[self.head - 1]) == None):
-        #     return
-        # if (self.queue[self.head]) <= (self.queue[self.head - 1]):
-        #     return
-        #else:
-            #if (self.queue[self.head - 1]) > (self.queue[self.head - 2]):
-             #print("Growing -> we dont care?")
-
+        if ((self.queue[self.head]) == None) or ((self.queue[self.head - 1]) == None):
+            return
+        if (self.queue[self.head]) <= (self.queue[self.head - 1]):
+            return
+  
         if (self.queue[self.head - 1]) < (self.queue[self.head - 2]):
             #print("No longer growing -> one ring?")
             if z1 > self.z1_last:
@@ -112,10 +109,10 @@ class MyCircularQueue():
                 self.ring_counter = self.ring_counter - 1
                 self.z1_last = z1
 
-            # elif z1 == self.z1_last:
-            #     self.ring_counter = self.ring_counter + 1
-            #     self.z1_last = z1
-            #     print("same")
+            elif z1 == self.z1_last:
+                self.ring_counter = self.ring_counter + 1
+                self.z1_last = z1
+                print("same")
 
             else:
                 print("Error")
@@ -138,7 +135,7 @@ class MyCircularQueue():
         else:
             print(f"Change: {self.change}, zero division")
 
-queue_object = MyCircularQueue(5)
+queue_object = MyCircularQueue(3)
 
 queue_object.enqueue(1)
 queue_object.enqueue(1)
@@ -226,7 +223,7 @@ def slider_changed( event ):
     #For debuging 
     #queue_object.print_rings()
     #print(I[255,255])
-    #print( z1 )    
+    print( z1 )    
 
     subp.clear()
     #subp.imshow(I, cmap = 'jet'); plt.axis('off'); plt.title('intensity pattern')
@@ -258,7 +255,8 @@ slider = tk.Scale(
     sliderlength = 150,
     command = slider_changed,
     variable = current_value,
-    resolution = 0.0001,
+    #resolution = 0.0001,
+    resolution = 0.001,
     bg = "black",
     fg = "white",
     activebackground = "red",
