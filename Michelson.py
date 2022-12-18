@@ -98,7 +98,7 @@ class MyCircularQueue():
             return
         if (self.queue[self.head]) <= (self.queue[self.head - 1]):
             return
-  
+
         if (self.queue[self.head - 1]) < (self.queue[self.head - 2]):
             #print("No longer growing -> one ring?")
             if z1 > self.z1_last:
@@ -117,17 +117,17 @@ class MyCircularQueue():
             else:
                 print("Error")
 
+        if (self.ring_counter <= 0):
+            self.ring_counter = 0                       # just to remove the chance of zero division and stoping it from going negative
+
     def print_rings(self):
         print(self.ring_counter)
 
     def track_change(self, z1):
         self.change = abs(z1 - self.z1_init)
-        #print(self.change)
 
     def print_lambda(self): 
-        #print("Uhh, need to figure out the formula but we have change in mm? and the ring count")
         if self.ring_counter != 0:
-            #print(2*self.change/self.ring_counter)
             lambda_value = 2*self.change/self.ring_counter
             print(lambda_value)
             lambda_label.configure( text = "Lambda: " + str(lambda_value) )
@@ -213,21 +213,21 @@ def slider_changed( event ):
     I = Intensity(1, F)
 
     #Calculateing the Lambda 
-    queue_object.enqueue(I[255, 255])
+    #queue_object.enqueue(I[255, 255])
+    queue_object.enqueue(I[150, 220])
     queue_object.check_peak(z1)
     queue_object.track_change(z1)
     queue_object.print_lambda()
 
 
     #For debuging 
-    #queue_object.print_rings()
+    queue_object.print_rings()
     #print(I[255,255])
-    print( z1 )    
+    #print( z1 )    
 
     subp.clear()
-    #subp.imshow(I, cmap = 'jet'); plt.axis('off'); plt.title('intensity pattern')
     subp.axis('off')
-    subp.imshow(I, cmap='gist_heat'); #plt.axis('off'); plt.title('intensity pattern')
+    subp.imshow(I, cmap='gist_heat'); 
     canvas.draw()
 
     Visualizer.slider_update_event(VIS, z1, z2_updated)
@@ -254,8 +254,8 @@ slider = tk.Scale(
     sliderlength = 150,
     command = slider_changed,
     variable = current_value,
-    resolution = 0.0001,
-    #resolution = 0.001,
+    #resolution = 0.0001,
+    resolution = 0.001,                        # Lowering the resolution will cause us to skip fewer rings.
     bg = "black",
     fg = "white",
     activebackground = "red",
@@ -264,7 +264,7 @@ slider = tk.Scale(
 
 slider.grid(
     column = 0,
-    row = 99,                     # high number = bottom of thing
+    row = 99,                    
     sticky = 'we'
 )
 
@@ -274,9 +274,9 @@ fig.patch.set_facecolor("black")
 
 I_start = calc_pattern()
 
-#subp.imshow(I_start, cmap='jet'); plt.axis('off'); plt.title('intensity pattern')
+
 subp.axis('off')
-subp.imshow(I_start, cmap='gist_heat'); #plt.axis('off'); plt.title('intensity pattern')
+subp.imshow(I_start, cmap='gist_heat'); 
 
 canvas = FigureCanvasTkAgg(fig, master)
 
@@ -308,11 +308,9 @@ lambda_label = tk.Label(
 
 lambda_label.grid(
     column = 0,
-    row = 1,                     # high number = bottom of thing
+    row = 1,                    
     sticky = 'we'
 )
-
-#master.after(20, Visualizer.init(master))
 
 master.mainloop()
 
