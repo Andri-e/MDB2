@@ -221,9 +221,9 @@ def slider_changed( event ):
 
 
     #For debuging 
-    queue_object.print_rings()
+    #queue_object.print_rings()
     #print(I[255,255])
-    #print( z1 )    
+    print( z1 )    
 
     subp.clear()
     subp.axis('off')
@@ -273,7 +273,6 @@ subp = fig.add_subplot(111)
 fig.patch.set_facecolor("black")
 
 I_start = calc_pattern()
-
 
 subp.axis('off')
 subp.imshow(I_start, cmap='gist_heat'); 
